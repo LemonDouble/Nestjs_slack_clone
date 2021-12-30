@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from 'src/common/decorator/user.decorator';
 import { UserDto } from 'src/common/dto/user.dto';
 import { JoinRequestDto } from './dto/join.request.dto';
 import { UsersService } from './users.service';
@@ -14,7 +15,11 @@ export class UsersController {
     type: UserDto,
   })
   @Get()
-  getUsers() {}
+  getUsers(@User() user) {
+    // common.decorator의 user.decorator.ts 참고
+    // req.user과 같다진다.
+    return user;
+  }
 
   @ApiOperation({ summary: '회원가입' })
   @Post()
@@ -33,7 +38,9 @@ export class UsersController {
     description: '서버 에러',
   })
   @Post('login')
-  login() {}
+  login(@User() user) {
+    return user;
+  }
 
   @ApiOperation({ summary: '로그아웃' })
   @Post('logout')
