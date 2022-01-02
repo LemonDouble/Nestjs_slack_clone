@@ -26,8 +26,9 @@ export class UsersController {
 
   @ApiOperation({ summary: '회원가입' })
   @Post()
-  postUsers(@Body() body: JoinRequestDto) {
-    this.usersService.postUsers(body.email, body.nickname, body.password);
+  async postUsers(@Body() body: JoinRequestDto) {
+    // await 안 붙여주면 async 함수 안에서 작성한 exception을 catch 못 한다! 꼭 await 붙여주자.
+    await this.usersService.postUsers(body.email, body.nickname, body.password);
   }
 
   @ApiOperation({ summary: '로그인' })
