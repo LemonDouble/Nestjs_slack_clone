@@ -1,24 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { Users } from 'src/entities/Users';
 
-export class JoinRequestDto {
-  @ApiProperty({
-    example: 'example.gmail.com',
-    description: '이메일',
-    required: true,
-  })
-  public email: string;
-
-  @ApiProperty({
-    example: 'lemondouble',
-    description: '닉네임',
-    required: true,
-  })
-  public nickname: string;
-
-  @ApiProperty({
-    example: 'nestjs',
-    description: '비밀번호',
-    required: true,
-  })
-  public password: string;
-}
+// Entity를 잘 정의했을 경우 다음과 같이 중복 제거가 가능하다.
+export class JoinRequestDto extends PickType(Users, [
+  'email',
+  'nickname',
+  'password',
+]) {}
