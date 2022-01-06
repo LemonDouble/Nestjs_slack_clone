@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 
+// UserService를 테스트하는 코드
 describe('UsersService', () => {
   let service: UsersService;
 
@@ -12,7 +13,8 @@ describe('UsersService', () => {
     service = module.get<UsersService>(UsersService);
   });
 
-  it('should be defined', () => {
+  // 각각의 Test 하나 : it
+  it('findByEma', () => {
     expect(service).toBeDefined();
   });
 });

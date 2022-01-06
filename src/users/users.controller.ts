@@ -1,8 +1,22 @@
-import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { User } from 'src/common/decorator/user.decorator';
 import { UserDto } from 'src/common/dto/user.dto';
 import { UndefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
+import { Users } from 'src/entities/Users';
 import { JoinRequestDto } from './dto/join.request.dto';
 import { UsersService } from './users.service';
 
@@ -13,15 +27,12 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @ApiOperation({ summary: '내 정보 조회' })
-  @ApiResponse({
-    type: UserDto,
-  })
+  @ApiCookieAuth('connect.sid')
+  @ApiOperation({ summary: '내 정보 가져오기' })
   @Get()
-  getUsers(@User() user) {
-    // common.decorator의 user.decorator.ts 참고
-    // req.user과 같다진다.
-    return user;
+  async getProfile(@User() user: Users) {
+    console.log('getProfile');
+    return user || false;
   }
 
   @ApiOperation({ summary: '회원가입' })
@@ -41,12 +52,17 @@ export class UsersController {
     status: 500,
     description: '서버 에러',
   })
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@User() user) {
+    console.log('login');
     return user;
   }
 
   @ApiOperation({ summary: '로그아웃' })
   @Post('logout')
-  logOut() {}
+  async logout(res) {
+    res.clearCookie('connect.sid', { httpOnly: true });
+    return res.send('ok');
+  }
 }

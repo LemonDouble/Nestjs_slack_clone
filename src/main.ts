@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import passport from 'passport';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './exception-filter/http-exception-filter';
 
@@ -27,7 +28,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  console.log(`Listening on port ${port}`);
+  // passport.js 사용 설정
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   // Hot Reloading 사용 설정
   if (module.hot) {
@@ -35,6 +38,7 @@ async function bootstrap() {
     module.hot.dispose(() => app.close());
   }
 
+  console.log(`Listening on port ${port}`);
   await app.listen(port);
 }
 bootstrap();
