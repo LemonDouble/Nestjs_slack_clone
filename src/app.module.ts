@@ -21,6 +21,7 @@ dotenv.config();
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    TypeOrmModule.forRoot(ormconfig),
     AuthModule,
     UsersModule,
     WorkspacesModule,
