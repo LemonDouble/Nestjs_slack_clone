@@ -19,6 +19,12 @@ async function bootstrap() {
   // validation Pipe 등록 (class-validator)
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors({
+    origin: 'http://localhost:3090',
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTION',
+    credentials: true,
+  });
+
   // Swagger API 사용 설정
   const config = new DocumentBuilder()
     .setTitle('Sleact API')

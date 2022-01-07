@@ -13,6 +13,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
+import { NotLoggedInGuard } from 'src/auth/not-logged-in.guard';
 import { User } from 'src/common/decorator/user.decorator';
 import { UserDto } from 'src/common/dto/user.dto';
 import { UndefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
@@ -31,15 +32,15 @@ export class UsersController {
   @ApiOperation({ summary: '내 정보 가져오기' })
   @Get()
   async getProfile(@User() user: Users) {
-    console.log('getProfile');
     return user || false;
   }
 
   @ApiOperation({ summary: '회원가입' })
+  @UseGuards(NotLoggedInGuard)
   @Post()
   async postUsers(@Body() body: JoinRequestDto) {
     // await 안 붙여주면 async 함수 안에서 작성한 exception을 catch 못 한다! 꼭 await 붙여주자.
-    await this.usersService.postUsers(body.email, body.nickname, body.password);
+    await this.usersService.join(body.email, body.nickname, body.password);
   }
 
   @ApiOperation({ summary: '로그인' })
