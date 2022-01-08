@@ -19,6 +19,15 @@ async function bootstrap() {
   // validation Pipe 등록 (class-validator)
   app.useGlobalPipes(new ValidationPipe());
 
+  // 아래와 같이 사용시 ParseInt등 사용하지 않아도 type에 맞춰 준다. (npm i class-transformer)
+  /*
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+  */
+
   app.enableCors({
     origin: 'http://localhost:3090',
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTION',
