@@ -14,6 +14,7 @@ import * as ormconfig from '../ormconfig';
 
 import dotenv from 'dotenv';
 import { AuthModule } from './auth/auth.module';
+import { EventsModule } from './events/events.module';
 
 dotenv.config();
 @Module({
@@ -28,6 +29,7 @@ dotenv.config();
     ChannelsModule,
     DmsModule,
     TypeOrmModule.forRoot(ormconfig),
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

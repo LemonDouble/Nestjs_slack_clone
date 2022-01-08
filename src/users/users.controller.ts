@@ -60,6 +60,7 @@ export class UsersController {
     return user;
   }
 
+  @ApiCookieAuth('connect.sid')
   @ApiOperation({ summary: '로그아웃' })
   @Post('logout')
   async logout(res) {

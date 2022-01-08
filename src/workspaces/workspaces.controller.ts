@@ -43,7 +43,9 @@ export class WorkspacesController {
   }
 
   @Get(':url/members')
-  async getAllMembersFromWorkspace() {}
+  async getAllMembersFromWorkspace(@Param('url') url: string) {
+    return this.workspacesService.getWorkspaceMembers(url);
+  }
 
   @Post(':url/members')
   async inviteMembersToWorkspace() {}

@@ -58,9 +58,9 @@ export class UsersService {
         WorkspaceId: 1,
       });
 
-      await queryRunner.manager.getRepository(WorkspaceMembers).save({
+      await queryRunner.manager.getRepository(ChannelMembers).save({
         UserId: savedUser.id,
-        WorkspaceId: 1,
+        ChannelId: 1,
       });
 
       // commit 꼭 해줘야 한다!

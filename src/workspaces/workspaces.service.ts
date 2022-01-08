@@ -29,7 +29,7 @@ export class WorkspacesService {
   async findMyWorkspaces(myId: number) {
     return await this.workspacesRepository.find({
       where: {
-        WorkspaceMembers: [{ UserId: myId }],
+        WorkspaceMembers: [{ userId: myId }],
       },
     });
   }
@@ -63,9 +63,11 @@ export class WorkspacesService {
   async getWorkspaceMembers(url: string) {
     // 'w.url = ${url}' 안 하고 별도로 객체 전달 이유? -> SQL Injection 방어?
     return await this.usersRepository
-      .createQueryBuilder('u')
-      .innerJoin('u.WorkspaceMembers', 'm')
-      .innerJoin('m.Workspace', 'w', 'w.url = :url', { url: url })
+      .createQueryBuilder('user')
+      .innerJoin('user.WorkspaceMembers', 'members')
+      .innerJoin('members.Workspace', 'workspace', 'workspace.url = :url', {
+        url: url,
+      })
       .getMany();
   }
 
