@@ -34,5 +34,38 @@ export class WorkspacesService {
     });
   }
 
-  async createWorkspace(name: string, url: string, myId: number) {}
+  async createWorkspace(name: string, url: string, myId: number) {
+    // crate는 Entity를 만들기만 할 뿐, 직접 저장되진 않는다!
+    const workspace = this.workspacesRepository.create({
+      name,
+      url,
+      OwnerId: myId,
+    });
+    // 꼭 save 호출해줘야 한다.
+    const savedEntity = await this.workspacesRepository.save(workspace);
+
+    const workspaceMember = new WorkspaceMembers();
+    workspaceMember.UserId = myId;
+    workspaceMember.WorkspaceId = savedEntity.id;
+    await this.workspaceMembersRepository.save(workspaceMember);
+
+    const channel = new Channels();
+    channel.name = '일반';
+    channel.WorkspaceId = workspaceMember.UserId;
+
+    const savedChannel = await this.channelsRepository.save(channel);
+    const channelMember = new ChannelMembers();
+    channelMember.UserId = myId;
+    channelMember.ChannelId = savedChannel.id;
+    await this.channelMembersRepository.save(channelMember);
+  }
+
+  async getWorkspaceMembers(url: string) {
+    // 'w.url = ${url}' 안 하고 별도로 객체 전달 이유? -> SQL Injection 방어?
+    return await this.usersRepository
+      .createQueryBuilder('u')
+      .innerJoin('u.WorkspaceMembers', 'm')
+      .innerJoin('m.Workspace', 'w', 'w.url = :url', { url: url })
+      .getMany();
+  }
 }

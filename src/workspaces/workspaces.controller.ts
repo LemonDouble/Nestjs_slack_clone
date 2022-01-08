@@ -43,14 +43,14 @@ export class WorkspacesController {
   }
 
   @Get(':url/members')
-  getAllMembersFromWorkspace() {}
+  async getAllMembersFromWorkspace() {}
 
   @Post(':url/members')
-  inviteMembersToWorkspace() {}
+  async inviteMembersToWorkspace() {}
 
   @Delete(':/url/members/:id')
-  kickMemberFromWorkspace() {}
+  async kickMemberFromWorkspace() {}
 
   @Get(':url/members/:id')
-  getMemberInfoInWorkspace() {}
+  async getMemberInfoInWorkspace() {}
 }
