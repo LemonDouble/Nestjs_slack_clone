@@ -5,6 +5,9 @@
 # dotenv
 .env
 
+# uploaded files
+/uploads
+
 # Logs
 logs
 *.log

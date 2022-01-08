@@ -4,13 +4,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import session from 'express-session';
+import path from 'path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './exception-filter/http-exception-filter';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const port = process.env.PORT || 3000;
 
   // exception Filter 등록
@@ -27,6 +29,12 @@ async function bootstrap() {
     }),
   );
   */
+
+  // static serve 폴더 적용
+  console.log('static foler: ', path.join(__dirname, '..', 'uploads'));
+  app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads',
+  });
 
   app.enableCors({
     origin: 'http://localhost:3090',
